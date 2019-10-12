@@ -1,21 +1,21 @@
 # import json
 import os
 
-data_type = 'yago'
-version = 'large'
+data_type = 'wiki'
+version = '/large'
 
-entity2id = data_type + '/entity2id.txt'
-relation2id = data_type + '/relation2id.txt'
-train_data = data_type + '/train.txt'
-valid_data  = data_type + '/valid.txt'
-test_data  =  data_type + '/test.txt'
-triple2id  =   data_type + '/triple2id_cp.txt'
+entity2id = data_type + version + '/entity2id.txt'
+relation2id = data_type + version + '/relation2id.txt'
+train_data = data_type + version + '/train.txt'
+valid_data  = data_type + version + '/valid.txt'
+test_data  =  data_type + version + '/test.txt'
+triple2id  =   data_type + version + '/triple2id.txt'
 
-save_dir = 'wiki/'
+save_dir = 'wiki_t2lp/'
 if not os.path.exists(save_dir): os.makedirs(save_dir)
-new_data = open(save_dir + '/valid_data.txt','w')
+new_data = open(save_dir + '/triple2id.txt', 'w')
 
-f = open(valid_data)
+f = open(triple2id)
 line = f.readline()
 
 # print(line.split('\t')[0])
@@ -25,22 +25,29 @@ while line:
     head = line.split('\t')[0]
     rel = line.split('\t')[1]
     tail = line.split('\t')[2]
-    start_time = line.split('\t')[3]
-    if len(start_time) < 5:
-        # i += 1
-        print(i)
-        start_time = '-50\n'
-        # end_time = line.split('\t')[4].split('-')[0]
-    # if '####' in start_time and end_time.find('#') != -1:
-    #     new_data.write(head + '\t' + rel + '\t' + tail + '\t' + end_time)
-    # if '####' in start_time:
-    #     new_data.write(head + '\t' + rel + '\t' + tail + '\t' + str(-50) + '\n')
-    # elif start_time.find('#') != -1 or len(start_time) != 4:
-    #     new_data.write(head + '\t' + rel + '\t' + tail + '\t' + str(-50) + '\n')
-    # else:
-    new_data.write(head + '\t' + rel + '\t' + tail + '\t' + start_time)
+    start_time = line.split('\t')[3].split('-')[0]
+    end_time = line.split('\t')[4].split('-')[0]
+    # start_time = line.split('\t')[3]
+    # end_time = line.split('\t')[4]
+    if '#' in start_time and '#' in end_time:
+        pass
+        # line = f.readline()
+        # continue
+    elif '#' in end_time:
+        new_data.write(head + '\t' + rel + '\t' + tail + '\t' + start_time + '\n')
+        i += 1
+    elif '#' in start_time:
+        new_data.write(head + '\t' + rel + '\t' + tail + '\t' + end_time + '\n')
+        i += 1
+    else:
+        if start_time == end_time:
+            new_data.write(head + '\t' + rel + '\t' + tail + '\t' + end_time + '\n')
+            i += 1
+        else:
+            for time in range(int(start_time), int(end_time)+1):
+                new_data.write(head + '\t' + rel + '\t' + tail + '\t' + str(time) + '\n')
+                i += 1
     line = f.readline()
-    i += 1
 
 # i = 0
 #
