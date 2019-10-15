@@ -3,17 +3,25 @@ from openpyxl import load_workbook
 
 result_workbook = load_workbook('./paper/LJ/实验.xlsx')
 result_sheetnames = result_workbook.get_sheet_names()
-# wiki_sheet = result_workbook.get_sheet_by_name('Wiki')
-yago_sheet = result_workbook.get_sheet_by_name('Yago')
+# wiki_sheet = result_workbook.get_sheet_by_name('Wiki_entity')
+# wiki_sheet = result_workbook.get_sheet_by_name('Wiki_relation')
+
+yago_sheet = result_workbook.get_sheet_by_name('Yago_entity')
+yago_sheet = result_workbook.get_sheet_by_name('Yago_relation')
+
 
 funcNames = ['TransE', 'TransH', 't-TransE', 'HyTE', 'RE-NET', 'T2LP']
-resultNames = ['Hits@1', 'Hits@3', 'Hits@5', 'Hits@7', 'Hits@10']
+# resultNames = ['Hits@1', 'Hits@3', 'Hits@5', 'Hits@7', 'Hits@10']
+resultNames = ['Hits@1', 'Hits@3', 'Hits@5'] # just for yago relation
+
 lineColor = ['b', 'g', 'r', 'c', 'm', 'k']
-spotStyle = ['ob', 'vg', '^r', 'sc', '*m', 'Dk']
+spotStyle = ['o-b', 'v-g', '^-r', 's-c', '*-m', 'D-k']
 
 i = 0
-x = [1, 2, 3, 4, 5]
-y = [0, 10, 20, 30, 40, 50, 60]
+# x = [1, 2, 3, 4, 5]
+x = [1, 2, 3]
+
+y = [0, 10, 20, 30, 40, 50, 60, 70, 80]
 for result_row in range(2, 2+len(funcNames)):
     results = []
     for result_col in range(3, 3+len(resultNames)):
@@ -24,8 +32,10 @@ for result_row in range(2, 2+len(funcNames)):
     plt.plot(x, results, spotStyle[i], linewidth=1, label=funcNames[i])
     i += 1
 
-x_labels = ['1', '3', '5', '7', '10']
-y_labels = ['0', '10', '20', '30', '40', '50', '60']
+# x_labels = ['1', '3', '5', '7', '10']
+x_labels = ['1', '3', '5']
+
+y_labels = ['0', '10', '20', '30', '40', '50', '60', '70', '80']
 # plt.title('Wiki Hits@K')
 plt.xlabel('K')
 plt.ylabel('Hits@K')
